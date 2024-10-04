@@ -1,0 +1,29 @@
+version: '3.7'
+
+networks:
+  content-test:
+    driver: bridge
+
+volumes:
+  pgdata:
+    driver: local
+
+services:
+  content-editor-backend-test:
+    build:
+      context: .
+      dockerfile: Dockerfile-test
+    image: content_editor_test:latest
+    container_name: content_editor_test
+    user: root
+    environment:
+      SECRET_KEY: ''
+      SQL_DATABASE_URL: ''
+      TZ: Asia/Ho_Chi_Minh
+    volumes:
+      - ./:/app
+    ports:
+      - "5003:5003"
+    restart: always
+    networks:
+      - "content-test"
