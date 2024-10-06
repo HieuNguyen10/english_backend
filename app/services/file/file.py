@@ -58,7 +58,7 @@ class FileService(object):
                     word.english = row[1]
                     word.type = row[2]
                     print("1.2")
-                    if (row[3] is None or row[3] == ""):
+                    if (row[3] is None or row[3] == "" or row[3]):
                         word.pronunciation = FileService.get_pronunciation(
                             word.english)
                     word.vietnamese = row[4]
@@ -68,6 +68,7 @@ class FileService(object):
                             status_code=422, detail=f"Word code at line {d} is invalid")
                     print("1.4")
                     word.word_code_lesson = word_code
+                    print(word)
                     word = WordService.creat_word_lessson(word, db)
                     if word is None:
                         raise HTTPException(
