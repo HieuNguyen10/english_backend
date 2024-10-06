@@ -24,7 +24,7 @@ class WordResponse(WordBase):
 
 
 class WordRequestWithLesson(WordRequest):
-    word_code_lesson: int | None = 0
+    word_code_lesson: str | None = 0
 
 
 class WordVN(BaseModel):
