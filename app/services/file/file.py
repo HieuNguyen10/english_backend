@@ -66,12 +66,13 @@ class FileService(object):
                     if not FileService.check_format(word_code):
                         raise HTTPException(
                             status_code=422, detail=f"Word code at line {d} is invalid")
+                    print("1.4")
                     word.word_code_lesson = word_code
                     word = WordService.creat_word_lessson(word, db)
                     if word is None:
                         raise HTTPException(
                             status_code=422, detail=f"Word code at line {d} is invalid")
-                    print("1.4")
+                    print("1.5")
             except Exception as exc:
                 print(exc)
             print("3")
