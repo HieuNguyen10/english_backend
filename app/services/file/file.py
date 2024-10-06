@@ -55,12 +55,12 @@ class FileService(object):
                     d += 1
                     word_code = row[0]
                     word = WordRequestWithLesson()
-                    word.english = row[1]
+                    word.english = row[1].strip()
                     word.type = row[2]
                     print("1.2")
                     if (row[3] is None or row[3] == "" or row[3]):
-                        word.pronunciation = FileService.get_pronunciation(
-                            word.english)
+                        word.pronunciation = "" if FileService.get_pronunciation(
+                            word.english) is None else FileService.get_pronunciation(word.english)
                     word.vietnamese = row[4]
                     print("1.3")
                     if not FileService.check_format(word_code):
