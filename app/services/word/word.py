@@ -56,6 +56,7 @@ class WordService(object):
             CRUDBase(LessonWord).create(db=db, obj_in=lesson_word)
             return word
         except Exception as e:
+            print(e)
             raise HTTPException(status_code=400, detail=str(e))
 
     @staticmethod
