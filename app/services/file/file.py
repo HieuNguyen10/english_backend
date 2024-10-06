@@ -51,15 +51,18 @@ class FileService(object):
             print("2")
             try:
                 for row in sheet.iter_rows(min_row=2, values_only=True):
+                    print("1.1")
                     d += 1
                     word_code = row[0]
                     word = WordRequestWithLesson()
                     word.english = row[1]
                     word.type = row[2]
+                    print("1.2")
                     if (row[3] is None or row[3] == ""):
                         word.pronunciation = FileService.get_pronunciation(
                             word.english)
                     word.vietnamese = row[4]
+                    print("1.3")
                     if not FileService.check_format(word_code):
                         raise HTTPException(
                             status_code=422, detail=f"Word code at line {d} is invalid")
@@ -68,6 +71,7 @@ class FileService(object):
                     if word is None:
                         raise HTTPException(
                             status_code=422, detail=f"Word code at line {d} is invalid")
+                    print("1.4")
             except Exception as exc:
                 print(exc)
             print("3")
