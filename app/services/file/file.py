@@ -122,6 +122,7 @@ class FileService(object):
     @staticmethod
     def get_pronunciation(word: str):
         try:
+            print("Getting pronunciation for word:", word)
             if len(word.split()) > 1:
                 print("Word contains two or more words. Returning None.")
                 return ""  # Trả về None nếu có hai từ trở lên
