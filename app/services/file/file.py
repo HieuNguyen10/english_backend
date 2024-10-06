@@ -49,24 +49,27 @@ class FileService(object):
                 raise HTTPException(status_code=422, detail="Sheet not found")
             d = 1
             print("2")
-            for row in sheet.iter_rows(min_row=2, values_only=True):
-                d += 1
-                word_code = row[0]
-                word = WordRequestWithLesson()
-                word.english = row[1]
-                word.type = row[2]
-                if (row[3] is None or row[3] == ""):
-                    word.pronunciation = FileService.get_pronunciation(
-                        word.english)
-                word.vietnamese = row[4]
-                if not FileService.check_format(word_code):
-                    raise HTTPException(
-                        status_code=422, detail=f"Word code at line {d} is invalid")
-                word.word_code_lesson = word_code
-                word = WordService.creat_word_lessson(word, db)
-                if word is None:
-                    raise HTTPException(
-                        status_code=422, detail=f"Word code at line {d} is invalid")
+            try:
+                for row in sheet.iter_rows(min_row=2, values_only=True):
+                    d += 1
+                    word_code = row[0]
+                    word = WordRequestWithLesson()
+                    word.english = row[1]
+                    word.type = row[2]
+                    if (row[3] is None or row[3] == ""):
+                        word.pronunciation = FileService.get_pronunciation(
+                            word.english)
+                    word.vietnamese = row[4]
+                    if not FileService.check_format(word_code):
+                        raise HTTPException(
+                            status_code=422, detail=f"Word code at line {d} is invalid")
+                    word.word_code_lesson = word_code
+                    word = WordService.creat_word_lessson(word, db)
+                    if word is None:
+                        raise HTTPException(
+                            status_code=422, detail=f"Word code at line {d} is invalid")
+            except Exception as exc:
+                print(exc)
             print("3")
             return True
         except Exception as exc:
