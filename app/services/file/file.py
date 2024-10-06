@@ -39,6 +39,7 @@ class FileService(object):
     @staticmethod
     def upload_file(file: File, db: Session = Depends(get_db)):
         try:
+            print("1")
             workbook = openpyxl.load_workbook(filename=io.BytesIO(file))
             # Mở sheet theo tên
             sheet_name = "Word"  # Tên của sheet mà bạn muốn mở
@@ -47,6 +48,7 @@ class FileService(object):
             else:
                 raise HTTPException(status_code=422, detail="Sheet not found")
             d = 1
+            print("2")
             for row in sheet.iter_rows(min_row=2, values_only=True):
                 d += 1
                 word_code = row[0]
@@ -65,8 +67,10 @@ class FileService(object):
                 if word is None:
                     raise HTTPException(
                         status_code=422, detail=f"Word code at line {d} is invalid")
+            print("3")
             return True
         except Exception as exc:
+            print(exc)
             raise HTTPException(status_code=422, detail="Something went wrong")
 
     @staticmethod
