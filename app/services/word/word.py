@@ -99,5 +99,6 @@ class WordService(object):
             else:
                 pronunciation_value = pronunciation  # Lấy trực tiếp giá trị phát âm
             print(pronunciation_value)
+            return pronunciation_value
         except Exception as exc:
             return None

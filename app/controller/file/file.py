@@ -11,6 +11,7 @@ from app.helpers.paging import Page, PaginationParams, paginate
 from app.helpers.filter import getFilter
 from app.helpers.login_manager import PermissionRequired
 from app.services.file.file import FileService
+from app.services.word.word import WordService
 from sqlalchemy import or_
 logger = logging.getLogger()
 
@@ -43,7 +44,7 @@ async def export_file(db: Session = Depends(get_db)):
 @router.get("/test")
 def test(req: str):
     try:
-        response = FileService.get_pronunciation(req)
+        response = WordService.get_pronunciation(req)
         return DataResponse().success(statusCode=status.HTTP_200_OK, data=response)
     except Exception as exc:
         print(exc)
