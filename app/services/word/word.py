@@ -52,7 +52,7 @@ class WordService(object):
             if (req.pronunciation == "" or req.pronunciation is None):
                 req.pronunciation = WordService.get_pronunciation(req.english)
                 if req.pronunciation is None:
-                    pronunciation = ""
+                    req.pronunciation = ""
             word = WordRequest(english=req.english, type=req.type,
                                pronunciation=req.pronunciation, vietnamese=req.vietnamese)
             word = CRUDBase(Word).create(db=db, obj_in=word)
