@@ -50,8 +50,8 @@ class WordService(object):
                     print(e)
                 return word
             if (req.pronunciation == "" or req.pronunciation is None):
-                pronunciation = WordService.get_pronunciation(req.english)
-                if pronunciation is None:
+                req.pronunciation = WordService.get_pronunciation(req.english)
+                if req.pronunciation is None:
                     pronunciation = ""
             word = WordRequest(english=req.english, type=req.type,
                                pronunciation=req.pronunciation, vietnamese=req.vietnamese)
@@ -92,13 +92,12 @@ class WordService(object):
             res = conn.getresponse()
             data = res.read()
             pronunciation_data = json.loads(data)
-            print(pronunciation_data)
             pronunciation = pronunciation_data.get("pronunciation")
             if isinstance(pronunciation, dict) and 'all' in pronunciation:
                 # Lấy giá trị từ thuộc tính 'all'
                 pronunciation_value = pronunciation['all']
             else:
                 pronunciation_value = pronunciation  # Lấy trực tiếp giá trị phát âm
-            return pronunciation_value
+            print(pronunciation_value)
         except Exception as exc:
             return None
