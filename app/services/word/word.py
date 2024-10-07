@@ -18,6 +18,8 @@ from app.serializers.lesson_word.lesson_word import LessonWordRequest
 from starlette.exceptions import HTTPException
 from sqlalchemy import and_
 import re
+import http.client
+import json
 
 
 class WordService(object):

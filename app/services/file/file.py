@@ -23,8 +23,6 @@ from sqlalchemy import and_
 import openpyxl
 import io
 import re
-import http.client
-import json
 
 
 class FileService(object):
