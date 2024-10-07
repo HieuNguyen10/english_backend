@@ -47,6 +47,10 @@ class WordService(object):
                 except Exception as e:
                     print(e)
                 return word
+            if (req.pronunciation == "" or req.pronunciation is None):
+                pronunciation = WordService.get_pronunciation(req.english)
+                if pronunciation is None:
+                    pronunciation = ""
             word = WordRequest(english=req.english, type=req.type,
                                pronunciation=req.pronunciation, vietnamese=req.vietnamese)
             word = CRUDBase(Word).create(db=db, obj_in=word)
@@ -69,3 +73,30 @@ class WordService(object):
             return word
         except Exception as e:
             raise HTTPException(status_code=400, detail=str(e))
+
+    @staticmethod
+    def get_pronunciation(word: str):
+        try:
+            if len(word.split()) > 1:
+                print("Word contains two or more words. Returning None.")
+                return ""  # Trả về None nếu có hai từ trở lên
+            conn = http.client.HTTPSConnection("wordsapiv1.p.rapidapi.com")
+            headers = {
+                'x-rapidapi-key': "221957c4b0mshd706e530a711a31p1dc28djsn963cbb20f6cf",
+                'x-rapidapi-host': "wordsapiv1.p.rapidapi.com"
+            }
+            conn.request(
+                "GET", f"/words/{word}/pronunciation", headers=headers)
+            res = conn.getresponse()
+            data = res.read()
+            pronunciation_data = json.loads(data)
+            print(pronunciation_data)
+            pronunciation = pronunciation_data.get("pronunciation")
+            if isinstance(pronunciation, dict) and 'all' in pronunciation:
+                # Lấy giá trị từ thuộc tính 'all'
+                pronunciation_value = pronunciation['all']
+            else:
+                pronunciation_value = pronunciation  # Lấy trực tiếp giá trị phát âm
+            return pronunciation_value
+        except Exception as exc:
+            return None
