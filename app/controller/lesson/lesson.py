@@ -12,6 +12,7 @@ from app.helpers.filter import getFilter
 from app.helpers.login_manager import PermissionRequired
 from sqlalchemy import or_
 from app.models.lesson.lesson import *
+from app.models.lesson_word.lesson_word import *
 from app.serializers.lesson.lesson import *
 from app.services.lesson.lesson import LessonService
 logger = logging.getLogger()
@@ -80,7 +81,23 @@ def update(req: LessonRequest, word_code: str, db: Session = Depends(get_db)):
 def delete(word_code: str, db: Session = Depends(get_db)):
     try:
         data = CRUDBase(Lesson).get(db=db, word_code=word_code)
-        response = CRUDBase(Lesson).remove(db=db, db_obj=data)
+        if (not data):
+            return DataResponse().errors(statusCode=status.HTTP_422_UNPROCESSABLE_ENTITY, error=["Not found"])
+        lesson_word = db.query(LessonWord).filter(
+            LessonWord.lesson_id == data.id).all()
+        for lw in lesson_word:
+            CRUDBase(LessonWord).remove(db=db, word_code=lw.word_code)
+        response = CRUDBase(Lesson).remove(db=db, word_code=data.word_code)
         return DataResponse().success(statusCode=status.HTTP_200_OK, data=response)
+    except Exception as exc:
+        print(exc)
+        return DataResponse().errors(statusCode=status.HTTP_422_UNPROCESSABLE_ENTITY, error=["Something went wrong"])
+
+
+@router.post("/full", response_model=DataResponse[List[LessonResponse]])
+def get_full_lesson(db: Session = Depends(get_db)):
+    try:
+        lessons = db.query(Lesson).all()  # Lấy tất cả dữ liệu từ bảng Lesson
+        return DataResponse().success(statusCode=status.HTTP_200_OK, data=lessons)
     except Exception as exc:
         return DataResponse().errors(statusCode=status.HTTP_422_UNPROCESSABLE_ENTITY, error=["Something went wrong"])

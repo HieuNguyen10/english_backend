@@ -88,7 +88,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
 
         return db_obj
 
-    def remove(self, db: Session, *, word_code: int) -> ModelType:
+    def remove(self, db: Session, *, word_code: Any) -> ModelType:
         obj = db.query(self.model).filter(self.model.word_code ==
                                           word_code, self.model.is_active == True).first()
 

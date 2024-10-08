@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from app.serializers.word.word import *
+from app.serializers.word.word import WordRequest, WordResponse
 
 
 class LessonWordBase(BaseModel):

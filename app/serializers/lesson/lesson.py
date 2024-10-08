@@ -1,10 +1,13 @@
 from typing import List
 from pydantic import BaseModel
-from app.serializers.lesson_word.lesson_word import *
+from app.serializers.lesson_word.lesson_word import WordRequest, LessonWordWithWord
 
 
 class LessonBase(BaseModel):
     title: str
+
+    class Config:
+        orm_mode = True
 
 
 class LessonRequest(BaseModel):

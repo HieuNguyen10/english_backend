@@ -14,6 +14,7 @@ from app.models.lesson_word.lesson_word import LessonWord
 
 from app.serializers.word.word import WordRequestWithLesson, WordVN, WordRequest
 from app.serializers.lesson_word.lesson_word import LessonWordRequest
+from app.serializers.lesson.lesson import LessonRequest
 
 from starlette.exceptions import HTTPException
 from sqlalchemy import and_
@@ -28,10 +29,11 @@ class WordService(object):
     @staticmethod
     def creat_word_lessson(req: WordRequestWithLesson, db: Session = Depends(get_db)):
         try:
-            lesson = CRUDBase(Lesson).get(
-                db=db, word_code=req.word_code_lesson)
+            lesson = db.query(Lesson).filter(
+                Lesson.title == req.word_code_lesson).first()
             if (not lesson):
-                raise HTTPException(status_code=400, detail="Lesson not found")
+                lesson = LessonRequest(title=req.word_code_lesson)
+                lesson = CRUDBase(Lesson).create(db=db, obj_in=lesson)
             lesson_id = lesson.id
             word = db.query(Word).filter(
                 and_(Word.english == req.english, Word.type == req.type)).first()
@@ -72,6 +74,21 @@ class WordService(object):
             if (not word):
                 raise HTTPException(status_code=400, detail="Word not found")
             word = CRUDBase(Word).update(db=db, db_obj=word, obj_in=req)
+            return word
+        except Exception as e:
+            raise HTTPException(status_code=400, detail=str(e))
+
+    @staticmethod
+    def delete_word(word_code: str, db: Session = Depends(get_db)):
+        try:
+            word = CRUDBase(Word).get(db=db, word_code=word_code)
+            if (not word):
+                raise HTTPException(status_code=400, detail="Word not found")
+            lesson_word = db.query(LessonWord).filter(
+                LessonWord.word_id == word.id).all()
+            for lw in lesson_word:
+                CRUDBase(LessonWord).remove(db=db, word_code=lw.word_code)
+            word = CRUDBase(Word).remove(db=db, word_code=word_code)
             return word
         except Exception as e:
             raise HTTPException(status_code=400, detail=str(e))

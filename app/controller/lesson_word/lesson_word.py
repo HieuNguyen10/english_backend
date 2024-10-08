@@ -70,7 +70,7 @@ def update(req: LessonWordRequest, word_code: str, db: Session = Depends(get_db)
 def delete(word_code: str, db: Session = Depends(get_db)):
     try:
         data = CRUDBase(LessonWord).get(db=db, word_code=word_code)
-        response = CRUDBase(LessonWord).remove(db=db, db_obj=data)
+        response = CRUDBase(LessonWord).remove(db=db, word_code=data.word_code)
         return DataResponse().success(statusCode=status.HTTP_200_OK, data=response)
     except Exception as exc:
         return DataResponse().errors(statusCode=status.HTTP_422_UNPROCESSABLE_ENTITY, error=["Something went wrong"])

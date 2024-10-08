@@ -9,8 +9,8 @@ class LessonWord(BaseModel):
 
     word_code = Column(String, nullable=False,
                        default=getByCodeMax('w_lesson_word', 'LW'))
-    lesson_id = Column(Integer, ForeignKey('w_lesson.id'), nullable=False)
-    word_id = Column(Integer, ForeignKey('w_word.id'), nullable=False)
+    lesson_id = Column(Integer, ForeignKey('w_lesson.id'), nullable=True)
+    word_id = Column(Integer, ForeignKey('w_word.id'), nullable=True)
 
     lesson = relationship('Lesson', back_populates='lesson_word')
     word = relationship('Word', back_populates='lesson_word')

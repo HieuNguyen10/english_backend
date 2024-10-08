@@ -54,9 +54,6 @@ class FileService(object):
                     word.type = row[2]
                     word.pronunciation = "" if row[3] is None else row[3]
                     word.vietnamese = row[4]
-                    if not FileService.check_format(word_code):
-                        raise HTTPException(
-                            status_code=422, detail=f"Word code at line {d} is invalid")
                     word.word_code_lesson = word_code
                     word = WordService.creat_word_lessson(word, db)
                     if word is None:

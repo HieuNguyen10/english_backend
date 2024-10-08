@@ -14,18 +14,19 @@ from sqlalchemy import or_
 from app.models.word.word import *
 from app.serializers.word.word import *
 from app.services.word.word import WordService
+from app.models.lesson_word.lesson_word import LessonWord
 logger = logging.getLogger()
 
 router = APIRouter()
 
 
 @router.get("", response_model=Page[WordResponse])
-def get(request: Request, text: str | None = None,  page: PaginationParams = Depends(), db: Session = Depends(get_db)):
+def get(request: Request, text: str | None = "",  page: PaginationParams = Depends(), db: Session = Depends(get_db)):
     try:
         _params = getFilter(request)
         _filter = CRUDBase(Word).filter_query(
             db=db, filter_condition=_params)
-        if text is not None:
+        if text is not None and text != "":
             ttext = f"%{text}%"
             _filter = _filter.filter(or_(
                 Word.english.ilike(ttext),
@@ -77,11 +78,18 @@ def update(req: WordRequest, word_code: str, db: Session = Depends(get_db)):
         return DataResponse().errors(statusCode=status.HTTP_422_UNPROCESSABLE_ENTITY, error=["Something went wrong"])
 
 
-@router.delete("/{word_code}", response_model=DataResponse[WordResponse])
+@router.delete("/{word_code}")
 def delete(word_code: str, db: Session = Depends(get_db)):
     try:
-        data = CRUDBase(Word).get(db=db, word_code=word_code)
-        response = CRUDBase(Word).remove(db=db, db_obj=data)
+        # Lấy dữ liệu từ bảng Word
+        word_data = CRUDBase(Word).get(db=db, word_code=word_code)
+        # Kiểm tra xem dữ liệu có tồn tại hay không
+        if not word_data:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail="Word not found")
+        response = WordService.delete_word(word_code, db)
         return DataResponse().success(statusCode=status.HTTP_200_OK, data=response)
     except Exception as exc:
+        print(exc)
+        # Xử lý ngoại lệ chung
         return DataResponse().errors(statusCode=status.HTTP_422_UNPROCESSABLE_ENTITY, error=["Something went wrong"])
