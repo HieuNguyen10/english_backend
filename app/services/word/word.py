@@ -109,13 +109,14 @@ class WordService(object):
             res = conn.getresponse()
             data = res.read()
             pronunciation_data = json.loads(data)
-            pronunciation = pronunciation_data.get("pronunciation")
-            if isinstance(pronunciation, dict) and 'all' in pronunciation:
-                # Lấy giá trị từ thuộc tính 'all'
-                pronunciation_value = pronunciation['all']
-            else:
-                pronunciation_value = pronunciation  # Lấy trực tiếp giá trị phát âm
-            print(pronunciation_value)
-            return pronunciation_value
+            # Lấy tất cả các key trong pronunciation
+            pronunciation_keys = list(
+                pronunciation_data['pronunciation'].keys())
+            first_key = pronunciation_keys[0]  # Lấy key đầu tiên
+            print(pronunciation_keys)
+            # Trả về giá trị của key đầu tiên trong pronunciation
+            if data['pronunciation'][first_key] != "":
+                return data['pronunciation'][first_key]
+            return first_key
         except Exception as exc:
             return None

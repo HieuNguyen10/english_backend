@@ -2,13 +2,13 @@ from pydantic import BaseModel
 
 
 class WordBase(BaseModel):
-    english: str
-    type: str
-    pronunciation: str
-    vietnamese: str
+    english: str | None = None
+    type: str | None = None
+    pronunciation: str | None = None
+    vietnamese: str | None = None
 
 
-class WordRequest(WordBase):
+class WordRequest(BaseModel):
     english: str | None = None
     type: str | None = None
     pronunciation: str | None = None
