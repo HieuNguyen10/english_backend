@@ -52,7 +52,8 @@ class WordService(object):
                     print(e)
                 return word
             if (req.pronunciation == "" or req.pronunciation is None):
-                req.pronunciation = WordService.get_pronunciation(req.english)
+                req.pronunciation = "/" + \
+                    WordService.get_pronunciation(req.english) + "/"
                 if req.pronunciation is None:
                     req.pronunciation = ""
             word = WordRequest(english=req.english, type=req.type,
@@ -113,10 +114,7 @@ class WordService(object):
             pronunciation_keys = list(
                 pronunciation_data['pronunciation'].keys())
             first_key = pronunciation_keys[0]  # Lấy key đầu tiên
-            print(pronunciation_keys)
             # Trả về giá trị của key đầu tiên trong pronunciation
-            if data['pronunciation'][first_key] != "":
-                return data['pronunciation'][first_key]
-            return first_key
+            return (pronunciation_data['pronunciation'][first_key])
         except Exception as exc:
             return None
