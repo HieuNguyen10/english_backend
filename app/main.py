@@ -37,7 +37,7 @@ def get_config():
 def get_application() -> FastAPI:
     application = FastAPI(
         title=settings.PROJECT_NAME,
-        docs_url='/api-docs',
+        docs_url='/api',
         # docs_url=None,
         redoc_url=None,
         openapi_url=f"{settings.API_PREFIX}/api-identity.json",
