@@ -22,9 +22,5 @@ RUN chown -R app_user:app_group /app
 # Chuyển sang người dùng không phải root
 USER app_user
 
-RUN alembic revision --autogenerate -m 'auto revision'
-
-RUN alembic upgrade head
-
 # Chạy Alembic revision và upgrade trước khi chạy app
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "5000"]
