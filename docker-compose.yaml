@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 services:
   smile-home-backend:
     build:
@@ -6,9 +6,10 @@ services:
       dockerfile: Dockerfile
     environment:
       PROJECT_NAME: ${PROJECT_NAME}
-      SQL_DATABASE_URL: 'postgresql+psycopg2://user_windy_coffee:QAERFHJFSHC12985@103.3.246.216:3015/windy_coffee_prod'
+      SQL_DATABASE_URL: "postgresql+psycopg2://postgres:100503@localhost:5432/Word"
       SECRET_KEY: ${SECRET_KEY}
-      TZ: 'Asia/Ho_Chi_Minh'
+      TZ: "Asia/Ho_Chi_Minh"
     ports:
       - "3014:5000"
+    network_mode: "host"
     restart: unless-stopped
