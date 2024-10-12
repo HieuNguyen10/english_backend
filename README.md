@@ -98,7 +98,7 @@ Hoặc
 
 ```bash
 * sudo -u postgres psql
-* CREATE DATABASE spincontents;
+* CREATE DATABASE "Word";
 * CREATE USER word_admin WITH PASSWORD '100503';
 * GRANT ALL PRIVILEGES ON DATABASE word TO user_spincontents;
 ```
