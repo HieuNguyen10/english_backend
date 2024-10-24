@@ -3,7 +3,7 @@ services:
   db:
     image: postgres
     ports:
-      - "5432:5432"
+      - "5433:5433"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=100503
@@ -14,10 +14,10 @@ services:
       dockerfile: Dockerfile
     environment:
       PROJECT_NAME: ${PROJECT_NAME}
-      SQL_DATABASE_URL: "postgresql+psycopg2://postgres:100503@localhost:5432/Word"
+      SQL_DATABASE_URL: "postgresql+psycopg2://postgres:100503@localhost:5433/Word"
       SECRET_KEY: ${SECRET_KEY}
       TZ: "Asia/Ho_Chi_Minh"
     ports:
-      - "3014:5000"
+      - "3015:5001"
     network_mode: "host"
     restart: unless-stopped
